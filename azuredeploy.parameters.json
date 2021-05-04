@@ -9,22 +9,25 @@
             "value":"{subscription of the target VNet}"
         },
         "vnetResourceGroup": {
-            "value":"{respurce group of the target vnet}"
+            "value":"lz01-rg"
         },
         "vnetName":{
-            "value":"{target vnet name}"
+            "value":"lz01-vnet"
         },
         "wafSubNetName" : {
-            "value":"{app gateway target subnet name}"
+            "value":"wafSubnet"
+        },
+        "wafPrivateIP" : {
+            "value": "10.10.3.5"
         },
         "appInboundSubNetName" : {
-            "value":"{app private endpoint target subnet name}"
+            "value":"appInboundSubnet"
         },
         "appOutboundSubNetName" : {
-            "value":"{app outbound target subnet name}"
+            "value":"appOutboundSubnet"
         },
         "sqlSubNetName" : {
-            "value":"{sql private endpoint target subnet name}"
+            "value":"sqlSubnet"
         },        
         "ADUserObjectID" : {
             "value": "{AAD object ID. Get-AzADUser}"

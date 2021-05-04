@@ -25,6 +25,12 @@
             "metadata": {
                 "description": "waf subnet ref"
             }
+        },
+        "privateIP": {
+            "type": "string",
+            "metadata": {
+                "description": "private ip for appgateway"
+            }
         }
     },
     "variables": {     
@@ -80,8 +86,9 @@
                 "frontendIPConfigurations": [
                     {
                         "name": "appGatewayFrontendIP",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic"                    
+                        "properties": {                          
+                            "privateIPAddress": "[parameters('privateIP')]"  ,
+                            "privateIPAllocationMethod": "Static"                   
                         }
                     },
                     {

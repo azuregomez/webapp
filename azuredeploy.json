@@ -153,7 +153,13 @@
               "description": "App Gateway Name."
           }
         },
-         "keyvaultname":{
+        "wafPrivateIP": {
+          "type": "string",          
+          "metadata": {
+              "description": "App Gateway private IP."
+          }
+        },
+        "keyvaultname":{
           "type": "string",
           "defaultValue": "[concat(parameters('resourceNamePrefix'),'-keyvault')]",
           "metadata": {
@@ -534,6 +540,9 @@
                     },
                     "wafSubnetRef": {
                         "value": "[variables('wafSubnetRef')]"
+                    },
+                    "privateIP" : {
+                        "value": "[parameters('wafPrivateIP')]"
                     }
                 }
             }
