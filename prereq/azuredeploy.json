@@ -152,19 +152,32 @@
                 {
                   "name": "[parameters('appInboundSubnetName')]",
                   "properties": {
-                    "addressPrefix": "[parameters('appInboundSubnetPrefix')]"                    
+                    "addressPrefix": "[parameters('appInboundSubnetPrefix')]",
+                    "privateEndpointNetworkPolicies": "Disabled"                    
                   }              
                 },
                 {
                   "name": "[parameters('appOutboundSubnetName')]",
                   "properties": {
-                    "addressPrefix": "[parameters('appOutboundSubnetPrefix')]"                    
+                    "addressPrefix": "[parameters('appOutboundSubnetPrefix')]",
+                    "delegations": [
+                      {
+                        "name": "delegation",                      
+                        "properties": {
+                            "serviceName": "Microsoft.Web/serverfarms",
+                            "actions": [
+                                "Microsoft.Network/virtualNetworks/subnets/action"
+                            ]
+                        }
+                      }
+                    ]
                   }              
                 },
                 {
                   "name": "[parameters('sqlSubnetName')]",
                   "properties": {
-                    "addressPrefix": "[parameters('sqlSubnetPrefix')]"                    
+                    "addressPrefix": "[parameters('sqlSubnetPrefix')]",
+                     "privateEndpointNetworkPolicies": "Disabled" 
                   }              
                 }
             ]    

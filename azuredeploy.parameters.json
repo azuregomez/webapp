@@ -3,31 +3,31 @@
     "contentVersion": "1.0.0.0",
     "parameters": {    
         "resourceNamePrefix":{
-            "value": "web01"
+            "value": "{prefix for resource name defaults}"
         },
         "vnetSubscription": {
-            "value":"{subscription where the target vnet exists}"
+            "value":"{subscription of the target VNet}"
         },
         "vnetResourceGroup": {
-            "value":"demo01-rg"
+            "value":"{respurce group of the target vnet}"
         },
         "vnetName":{
-            "value":"demo01-spoke-vnet"
+            "value":"{target vnet name}"
         },
         "wafSubNetName" : {
-            "value":"wafSubnet"
+            "value":"{app gateway target subnet name}"
         },
         "appInboundSubNetName" : {
-            "value":"appInboundSubnet"
+            "value":"{app private endpoint target subnet name}"
         },
         "appOutboundSubNetName" : {
-            "value":"appOutboundSubnet"
+            "value":"{app outbound target subnet name}"
         },
         "sqlSubNetName" : {
-            "value":"sqlSubnet"
+            "value":"{sql private endpoint target subnet name}"
         },        
         "ADUserObjectID" : {
-            "value": "{get-azaduser for your user so you have AKV persmission}"
+            "value": "{AAD object ID. Get-AzADUser}"
         } 
     }
 }
