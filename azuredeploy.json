@@ -468,7 +468,7 @@
                     "uri": "[variables('dnsvnetLinkNestedTemplateUri')]"
                 },
                 "parameters": {                   
-                    "vnet" :{
+                    "vnetid" :{
                         "value": "[variables('vnetid')]"
                     },         
                     "suffix" : {
