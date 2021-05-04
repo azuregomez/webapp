@@ -80,7 +80,12 @@
                 "frontendIPConfigurations": [
                     {
                         "name": "appGatewayFrontendIP",
-                        "privateIPAllocationMethod": "Static"                    
+                        "properties": {
+                            "privateIPAllocationMethod": "Static"                    
+                        },
+                         "subnet": {
+                            "id": "[parameters('wafSubnetRef')]"
+                        }
                     },
                     {
                         "name": "notusedAppGatewayFrontendIP",
