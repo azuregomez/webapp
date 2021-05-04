@@ -27,19 +27,40 @@
             }
         }
     },
-    "variables": {        
+    "variables": {     
+         "wafPublicIPName": "[concat(parameters('appgwyName'),'-vip')]",
+        "wafPublicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',variables('wafPublicIPName'))]",   
         "wafMode": "Prevention",
         "applicationGatewaySize":"WAF_v2",
         "applicationGatewayCapacity":2,
         "applicationGatewayID": "[resourceId('Microsoft.Network/applicationGateways',parameters('appgwyName'))]"
     },
-     "resources": [              
+     "resources": [          
+          {
+            "comments": "Public IP for App Gateway",
+            "apiVersion": "2017-08-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('wafPublicIPName')]",
+            "location": "[resourceGroup().location]",  
+            "sku":{
+                "name":"Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                "domainNameLabel": "[parameters('domainNameLabel')]"
+                }
+            }
+        },    
         {
             "comments": "App Gateway",
             "apiVersion": "2018-12-01",
             "name": "[parameters('appgwyName')]",
             "type": "Microsoft.Network/applicationGateways",
-            "location": "[resourceGroup().location]",            
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+               "[concat('Microsoft.Network/publicIPAddresses/', variables('wafPublicIPName'))]"
+            ],
             "properties": {
                 "sku": {
                 "name": "[variables('applicationGatewaySize')]",
@@ -57,9 +78,17 @@
                 }
                 ],
                 "frontendIPConfigurations": [
-                {
-                    "name": "appGatewayFrontendIP",
-                    "privateIPAllocationMethod": "Static"                    
+                    {
+                        "name": "appGatewayFrontendIP",
+                        "privateIPAllocationMethod": "Static"                    
+                    },
+                    {
+                        "name": "notusedAppGatewayFrontendIP",
+                        "properties": {
+                            "PublicIPAddress": {
+                                "id": "[variables('wafPublicIPRef')]"
+                            }
+                    }
                 }
                 ],
                 "frontendPorts": [
