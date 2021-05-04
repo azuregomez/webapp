@@ -23,7 +23,7 @@
          "wafSubnetRef": {
             "type": "string",
             "metadata": {
-                "description": "waf subnet ref"
+                "description": "waf subnet id"
             }
         }
     },
