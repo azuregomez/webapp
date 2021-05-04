@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {    
         "resourceNamePrefix":{
-            "value": "prefix for resource name defaults"
+            "value": "prefix-for-resource-name-defaults"
         },
         "vnetSubscription": {
             "value":"subscription-of-the-target-VNet"
@@ -30,7 +30,7 @@
             "value":"sqlSubnet"
         },        
         "ADUserObjectID" : {
-            "value": "AAD object ID. Get-AzADUser"
+            "value": "AAD-object-ID: Get-AzADUser"
         } 
     }
 }
