@@ -1,0 +1,280 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceNamePrefix":{
+            "type": "string",
+            "metadata": {
+              "description": "Prefix for naming resources"
+            }
+          },                    
+          "VnetName": {
+              "type": "string",
+              "defaultValue": "[concat(parameters('resourceNamePrefix'),'-vnet')]",
+              "metadata": {
+                "description": "Name of VNET"
+              }
+          },       
+          "VnetAddressPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.0.0/16",
+              "metadata": {
+                "description": "Spoke VNet Address prefix"
+              }
+          },
+          "dropboxSubnetName": {
+              "type": "string",
+              "defaultValue": "dropboxSubnet",
+              "metadata": {
+                "description": "Name of VNET"
+              }
+          },       
+          "dropboxSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.1.0/24",
+              "metadata": {
+                "description": "dropbox subnet Address prefix"
+              }
+          },                
+          "bastionSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.2.0/24",
+              "metadata": {
+                "description": "bastion subnet Address prefix"
+              }
+          },
+          "wafSubnetName": {
+              "type": "string",
+              "defaultValue": "wafSubnet"
+          },       
+          "wafSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.3.0/24"
+          },
+          "appInboundSubnetName": {
+              "type": "string",
+              "defaultValue": "appInboundSubnet"
+          },       
+          "appInboundSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.4.0/24"
+          },
+          "appOutboundSubnetName": {
+              "type": "string",
+              "defaultValue": "appOutboundSubnet"
+          },       
+          "appOutboundSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.5.0/24"
+          },
+          "sqlSubnetName": {
+              "type": "string",
+              "defaultValue": "sqlSubnet"
+          },       
+          "sqlSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "10.10.6.0/24"
+          },
+         "bastionHostName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('resourceNamePrefix'),'-bastion')]",
+            "metadata": {
+                "description": "Name of Azure Bastion resource"
+            }
+         },
+         "dropboxVmName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('resourceNamePrefix'),'-dropbox')]",
+            "metadata": {
+                "description": "Name of dropbox"
+            }
+         },
+         "adminUsername": {
+            "type": "string",
+            "defaultValue": "azureadmin",
+            "metadata": {
+                "description": "vm admin user"
+            }
+         },
+         "adminPassword": {
+            "type": "string",
+            "defaultValue": "p@ssw0rd!123",
+            "metadata": {
+                "description": "vm admin pwd"
+            }
+         },
+          "windowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2016-Datacenter",            
+            "metadata": {
+                "description": "The Windows version for the VM"
+            }
+        }       
+    },
+    "variables" : {                
+        "publicipaddressname": "[concat(parameters('bastionHostName'),'-pip')]",
+        "bastionSubnetName" : "AzureBastionSubnet",
+        "vmsku" : "Standard_D2_v3",
+        "nicname": "[concat(parameters('dropboxVmName'),'-nic')]"        
+    },
+    "resources": [               
+        {
+            "comments": "Spoke VNet",
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('VnetName')]",
+            "location": "[resourcegroup().location]",        
+            "properties": {
+                "addressSpace": {
+                "addressPrefixes": [
+                  "[parameters('VnetAddressPrefix')]"
+                ]
+              },
+            "subnets": [
+                {
+                  "name": "[variables('bastionSubnetName')]",
+                  "properties": {
+                    "addressPrefix": "[parameters('bastionSubnetPrefix')]"                
+                  }              
+                },
+                {
+                  "name": "[parameters('dropboxSubnetName')]" ,
+                  "properties": {
+                    "addressPrefix": "[parameters('dropboxSubnetPrefix')]"                
+                  }              
+                },           
+                {
+                  "name": "[parameters('wafSubnetName')]",
+                  "properties": {
+                    "addressPrefix": "[parameters('wafSubnetPrefix')]"                    
+                  }              
+                },
+                {
+                  "name": "[parameters('appInboundSubnetName')]",
+                  "properties": {
+                    "addressPrefix": "[parameters('appInboundSubnetPrefix')]"                    
+                  }              
+                },
+                {
+                  "name": "[parameters('appOutboundSubnetName')]",
+                  "properties": {
+                    "addressPrefix": "[parameters('appOutboundSubnetPrefix')]"                    
+                  }              
+                },
+                {
+                  "name": "[parameters('sqlSubnetName')]",
+                  "properties": {
+                    "addressPrefix": "[parameters('sqlSubnetPrefix')]"                    
+                  }              
+                }
+            ]    
+          }        
+        },
+         {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('publicipaddressname')]",
+            "location": "[resourceGroup().location]", 
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[parameters('bastionHostName')]",
+            "location": "[resourceGroup().location]", 
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicipaddressname'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('VnetName'))]"                
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VnetName'), variables('bastionSubnetName'))]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicipaddressname'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+         {
+        "comments": "NIC for dropbox",
+        "apiVersion": "2016-03-30",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[variables('nicName')]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"          
+        ],
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",                
+                "subnet": {
+                  "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets/', parameters('VnetName'), parameters('dropboxSubnetName'))]"
+                }
+              }
+            }
+          ]
+        }
+      },
+        {
+        "comments": "dropbox VM",
+        "apiVersion": "2017-03-30",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[parameters('dropboxVmName')]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [          
+           "[resourceId('Microsoft.Network/virtualNetworks', parameters('VnetName'))]",
+           "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        ],
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[variables('vmsku')]"
+          },
+          "osProfile": {
+            "computerName": "[parameters('dropboxVmName')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "MicrosoftWindowsServer",
+              "offer": "WindowsServer",
+              "sku": "[parameters('windowsOSVersion')]",
+              "version": "latest"
+            },
+            "osDisk": {
+              "createOption": "FromImage"
+            },
+            "dataDisks": [
+              {
+                "diskSizeGB": 1023,
+                "lun": 0,
+                "createOption": "Empty"
+              }
+            ]
+          },
+           "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              }
+            ]
+          }
+        }
+      }
+    ]
+}

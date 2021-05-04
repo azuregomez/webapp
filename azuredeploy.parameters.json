@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {    
+        "resourceNamePrefix":{
+            "value": "web01"
+        },
+        "vnetSubscription": {
+            "value":"f05bd3e7-fe83-40ae-9dec-7f146792b60d"
+        },
+        "vnetResourceGroup": {
+            "value":"demo01-rg"
+        },
+        "vnetName":{
+            "value":"demo01-spoke-vnet"
+        },
+        "wafSubNetName" : {
+            "value":"wafSubnet"
+        },
+        "appInboundSubNetName" : {
+            "value":"appInboundSubnet"
+        },
+        "appOutboundSubNetName" : {
+            "value":"appOutboundSubnet"
+        },
+        "sqlSubNetName" : {
+            "value":"sqlSubnet"
+        },        
+        "ADUserObjectID" : {
+            "value": "bdaea4af-b4ea-474e-b69e-f5e982f5df78"
+        } 
+    }
+}
