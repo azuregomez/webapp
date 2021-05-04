@@ -87,8 +87,11 @@
                     {
                         "name": "appGatewayFrontendIP",
                         "properties": {                          
-                            "privateIPAddress": "[parameters('privateIP')]"  ,
-                            "privateIPAllocationMethod": "Static"                   
+                            "privateIPAddress": "[parameters('privateIP')]",
+                            "privateIPAllocationMethod": "Static",
+                              "subnet": {
+                                    "id": "[parameters('wafSubnetRef')]"
+                                }        
                         }
                     },
                     {
