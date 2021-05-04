@@ -6,7 +6,7 @@
             "value": "web01"
         },
         "vnetSubscription": {
-            "value":"f05bd3e7-fe83-40ae-9dec-7f146792b60d"
+            "value":"{subscription where the target vnet exists}"
         },
         "vnetResourceGroup": {
             "value":"demo01-rg"
@@ -27,7 +27,7 @@
             "value":"sqlSubnet"
         },        
         "ADUserObjectID" : {
-            "value": "bdaea4af-b4ea-474e-b69e-f5e982f5df78"
+            "value": "{get-azaduser for your user so you have AKV persmission}"
         } 
     }
 }
