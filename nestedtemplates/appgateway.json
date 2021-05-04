@@ -82,9 +82,6 @@
                         "name": "appGatewayFrontendIP",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic"                    
-                        },
-                         "subnet": {
-                            "id": "[parameters('wafSubnetRef')]"
                         }
                     },
                     {
