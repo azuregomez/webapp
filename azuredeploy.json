@@ -172,6 +172,13 @@
           "metadata": {
             "description": "DB cnstring secret name"
           }
+        },    
+         "redisCacheName":{
+          "type": "string",
+          "defaultValue": "[concat(parameters('resourceNamePrefix'),'-cache')]",
+          "metadata": {
+              "description": "Redis Cache Name."
+          }
         },            
         "ADUserObjectID": {
           "type": "string",
@@ -203,7 +210,8 @@
       "sqlfirewallNestedTemplateUri" : "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/sqlfirewall.json', parameters('_artifactsLocationSasToken')))]",      
       "akvNestedTemplateUri" : "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/keyvault.json', parameters('_artifactsLocationSasToken')))]",
       "cnStrNestedTemplateUri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/cnstr.json', parameters('_artifactsLocationSasToken')))]",            
-      "sqlnoPublicNestedTemplateUri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/sqlnopublic.json', parameters('_artifactsLocationSasToken')))]",      
+      "sqlnoPublicNestedTemplateUri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/sqlnopublic.json', parameters('_artifactsLocationSasToken')))]",
+      "redisCacheNestedTemplateUri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/rediscache.json', parameters('_artifactsLocationSasToken')))]",
       "vnetid": "[resourceId(parameters('vnetSubscription'), parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
       "wafSubnetRef": "[resourceId(parameters('vnetSubscription'), parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('wafSubnetName'))]",
       "sqlSubnetRef": "[resourceId(parameters('vnetSubscription'), parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('sqlSubnetName'))]",
@@ -596,6 +604,27 @@
                     }
                 }
             }
-    }    
+    },
+    {
+            "comments": "rediscache.json nested ARM template for Redis Cache",
+            "name": "linkedTemplate-redis",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "dependsOn": [                
+                "linkedTemplate-webapp"                
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('rediscacheNestedTemplateUri')]"
+                },
+                "parameters": {                   
+                    "redisCacheName":{
+                        "value": "[parameters('redisCacheName')]"
+                    }
+                }
+            }
+    }
   ]
 }

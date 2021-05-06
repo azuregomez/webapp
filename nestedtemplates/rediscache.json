@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "redisCacheName": {
+            "type": "string"
+        },
+        "skuName":{
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "skuFamily":{
+            "type": "string",
+            "defaultValue": "C"
+        },
+        "capacity":{
+            "type": "int",
+            "defaultValue": 0
+        }
+    },       
+    "resources": [
+        {
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('redisCacheName')]",
+        "type": "Microsoft.Cache/Redis",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "family": "[parameters('skuFamily')]",
+                "capacity": "[parameters('capacity')]"
+            },            
+            "enableNonSslPort": true
+            }
+        }
+    ]
+}
