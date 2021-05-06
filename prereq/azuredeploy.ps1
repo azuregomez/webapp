@@ -5,7 +5,7 @@ $templateparamfile = $localpath + "azuredeploy.parameters.json"
 $params = get-content $templateparamfile | ConvertFrom-Json
 $prefix = $params.parameters.resourcenameprefix.value
 $rgname = $prefix + "-rg"
-$location = "East US"
+$location = "Central US"
 $rg = get-azresourcegroup -location $location -name $rgname
 if ($null -eq $rg)
 {

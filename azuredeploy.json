@@ -178,6 +178,18 @@
           "metadata": {
             "description": "Object Id of the AD user. Get using Get-AzADUser or Get-AzADServicePrincipal cmdlets"
           }
+        },
+        "deployWaf": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "deployApplicationCode": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "deployBacPac": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables":{      
@@ -229,6 +241,7 @@
             }
     },
     {
+            "condition": "[parameters('deployApplicationCode')]",
             "comments": "msdeploy.json nested ARM template for package deployment. This is optional",
             "name": "linkedTemplate-msdeploy",
             "type": "Microsoft.Resources/deployments",
@@ -371,6 +384,9 @@
                     },
                     "sqldatabaseBacpacUrl": {
                         "value": "[parameters('sqldatabaseBacpacUrl')]"
+                    },
+                    "deployBacPac" :{
+                        "value": "[parameters('deployBacPac')]"
                     }
                 }
             }
@@ -514,6 +530,7 @@
             }
     },        
     {
+            "condition" : "[parameters('deployWaf')]",
             "comments": "appgateway.json nested ARM template for App Gateway",
             "name": "linkedTemplate-appgateway",
             "type": "Microsoft.Resources/deployments",

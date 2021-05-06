@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {    
         "resourceNamePrefix":{
-            "value": "lz01"
+            "value": "lz02"
         }      
     }
 }
