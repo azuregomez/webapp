@@ -1,5 +1,5 @@
 # Landing Zone
-This folder deploys a Landig Zone VNet:
+This folder deploys a Landing Zone VNet:
 Subnet | Purpose
 ------|--------
 AzureBastionSubnet | Azure Bastion
