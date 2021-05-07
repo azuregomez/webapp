@@ -1,6 +1,6 @@
 # App Service with SQL DB 
 ## Architecture
-![Landing Zone](/blob/main/websql.png)
+![Landing Zone](blob/main/websql.png)
 This architecture leverages the following Azure Security features:
 
 Feature | Purpose | Reference
