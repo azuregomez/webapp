@@ -1,4 +1,18 @@
 # App Service with SQL DB 
+## Why migrate your application to App Service and Azure SQL DB?
+* Get out of the business of managing infrastructure. Just manage code and ship new features faster.
+* Get built-in Cloud Native features: Monitoring, Autoscaling, High Availability, Disaster Recovery.
+* App Service is the only managed app hosting platform for .net. 
+* 2 decades of investment and 25+ years of SQL innovation.
+* Proven success: hosting 2M apps and 41B daily requests with 99.95% SLA.
+* Free App Service and Database Migration Assistants.
+* Leverage full network security and integration, with internet traffic blocked, firewalls protecting your deployment and supporting hybrid applications that integrate securely with other services in your network.
+## Technical Requirements of the solution presented
+.net application migration with a SQL Server back end the following Security features:
+* No public endpoints available for Web Application or SQL Database.
+* Secrets like database connection strings not available in code or application configuration.
+* Internal Web Application Firewall in front of Web Application to protect against the top 10 OWASP threats.
+* Hybrid connectivity: Outbound traffic from the Web App to other VNet and on-premise resources.
 ## Architecture
 ![Landing Zone](https://github.com/azuregomez/webapp/blob/main/websql.png)
 This architecture leverages the following Azure Security features:
